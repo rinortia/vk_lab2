@@ -1,0 +1,22 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "tasks.max": "1",
+  "database.hostname": "source",
+  "database.port": "5432",
+  "database.user": "cdc",
+  "database.password": "cdc",
+  "database.dbname": "bank",
+  "topic.prefix": "bank",
+  "table.include.list": "public.accounts",
+  "plugin.name": "pgoutput",
+  "slot.name": "bank_slot",
+  "publication.name": "bank_publication",
+  "publication.autocreate.mode": "disabled",
+  "snapshot.mode": "initial",
+  "provide.transaction.metadata": "true",
+  "tombstones.on.delete": "true",
+  "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "key.converter.schemas.enable": "false",
+  "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "value.converter.schemas.enable": "false"
+}

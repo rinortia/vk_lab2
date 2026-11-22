@@ -1,0 +1,5 @@
+pyiceberg[sql-postgres,pyarrow]==0.10.0
+kafka-python==2.2.15
+pyarrow==26.0.1
+psycopg2-binary==2.9.11
+sqlalchemy==2.1.9

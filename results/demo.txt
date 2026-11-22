@@ -1,0 +1,131 @@
+/usr/local/lib/python3.12/site-packages/pyiceberg/avro/decoder.py:185: UserWarning: Falling back to pure Python Avro decoder, missing Cython implementation
+  warnings.warn("Falling back to pure Python Avro decoder, missing Cython implementation")
+/usr/local/lib/python3.12/site-packages/pyiceberg/avro/decoder.py:185: UserWarning: Falling back to pure Python Avro decoder, missing Cython implementation
+  warnings.warn("Falling back to pure Python Avro decoder, missing Cython implementation")
+/usr/local/lib/python3.12/site-packages/pyiceberg/avro/decoder.py:185: UserWarning: Falling back to pure Python Avro decoder, missing Cython implementation
+  warnings.warn("Falling back to pure Python Avro decoder, missing Cython implementation")
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+DELETE 1
+INSERT 0 1
+PASS: real CDC -> 7 versions; no-op, delete, current and historical query checked
+[
+  {
+    "version_id": "71282ce458afb177a0f17dce602d347ccbe38ec0d8d8b551315d01b900fa03be",
+    "account_id": 1001,
+    "version": 1,
+    "owner": "Мария Соколова",
+    "city": "Москва",
+    "status": "active",
+    "is_deleted": false,
+    "valid_from_ms": 1795369908880,
+    "valid_to_ms": 1795369930270,
+    "is_current": false,
+    "partition": 0,
+    "kafka_offset": 0,
+    "lsn": 26611360,
+    "valid_from": "2026-11-22T17:51:48.880000+00:00",
+    "valid_to": "2026-11-22T17:52:10.270000+00:00"
+  },
+  {
+    "version_id": "783ceef95c1ab99827f41b3a93c4007f02caca0d6c28c2ea660a124529cbdfe7",
+    "account_id": 1001,
+    "version": 2,
+    "owner": "Наталья Волкова",
+    "city": "Москва",
+    "status": "active",
+    "is_deleted": false,
+    "valid_from_ms": 1795369930270,
+    "valid_to_ms": 1795369931543,
+    "is_current": false,
+    "partition": 0,
+    "kafka_offset": 2,
+    "lsn": 26611456,
+    "valid_from": "2026-11-22T17:52:10.270000+00:00",
+    "valid_to": "2026-11-22T17:52:11.543000+00:00"
+  },
+  {
+    "version_id": "8c4e81779eaa2758595fe5d81969797b5b6b4c983fe8568dcab602f3752bc19b",
+    "account_id": 1001,
+    "version": 3,
+    "owner": "Наталья Волкова",
+    "city": "Санкт-Петербург",
+    "status": "active",
+    "is_deleted": false,
+    "valid_from_ms": 1795369931543,
+    "valid_to_ms": 1795369932805,
+    "is_current": false,
+    "partition": 0,
+    "kafka_offset": 3,
+    "lsn": 26612032,
+    "valid_from": "2026-11-22T17:52:11.543000+00:00",
+    "valid_to": "2026-11-22T17:52:12.805000+00:00"
+  },
+  {
+    "version_id": "fc15e0a33929cb231569f9a02f3acfac528efbfa2131904ffe01aaca54d6cffb",
+    "account_id": 1001,
+    "version": 4,
+    "owner": "Наталья Волкова",
+    "city": "Санкт-Петербург",
+    "status": "blocked",
+    "is_deleted": false,
+    "valid_from_ms": 1795369932805,
+    "valid_to_ms": null,
+    "is_current": true,
+    "partition": 0,
+    "kafka_offset": 4,
+    "lsn": 26612288,
+    "valid_from": "2026-11-22T17:52:12.805000+00:00"
+  },
+  {
+    "version_id": "0d8952a10ea3fe921e45beb6ad4ea7e76658e36de10ff788afb66465048fb908",
+    "account_id": 1002,
+    "version": 1,
+    "owner": "Илья Орлов",
+    "city": "Казань",
+    "status": "active",
+    "is_deleted": false,
+    "valid_from_ms": 1795369908880,
+    "valid_to_ms": 1795369935341,
+    "is_current": false,
+    "partition": 0,
+    "kafka_offset": 1,
+    "lsn": 26611360,
+    "valid_from": "2026-11-22T17:51:48.880000+00:00",
+    "valid_to": "2026-11-22T17:52:15.341000+00:00"
+  },
+  {
+    "version_id": "f3ae49027eb2e88a499077008a8f6d54a4969f5b243e5e805bc9fce7db6b7d48",
+    "account_id": 1002,
+    "version": 2,
+    "owner": "Илья Орлов",
+    "city": "Казань",
+    "status": "active",
+    "is_deleted": true,
+    "valid_from_ms": 1795369935341,
+    "valid_to_ms": null,
+    "is_current": true,
+    "partition": 0,
+    "kafka_offset": 6,
+    "lsn": 26612832,
+    "valid_from": "2026-11-22T17:52:15.341000+00:00"
+  },
+  {
+    "version_id": "b737cb3f40d1da0db2ef9cf30960e3a73bddd1eca77d4cce746bed8e09112bf1",
+    "account_id": 1003,
+    "version": 1,
+    "owner": "Олег Лебедев",
+    "city": "Пермь",
+    "status": "active",
+    "is_deleted": false,
+    "valid_from_ms": 1795369936579,
+    "valid_to_ms": null,
+    "is_current": true,
+    "partition": 0,
+    "kafka_offset": 8,
+    "lsn": 26612992,
+    "valid_from": "2026-11-22T17:52:16.579000+00:00"
+  }
+]

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="marina-bank-cdc" name="CDC → SCD Type 2">
+    <mxGraphModel dx="1640" dy="1120" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1640" pageHeight="1120" background="#f7f9fc">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="История владельцев банковских счетов" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=34;fontColor=#182a43;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="35" width="1500" height="55" />
+        </mxCell>
+        <mxCell id="subtitle" value="Вариант 1 · Ровнягина Марина Александровна · CDC → SCD Type 2 → Lakehouse" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=21;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="90" width="1500" height="45" />
+        </mxCell>
+        <mxCell id="source" value="1  PostgreSQL&#10;&#10;public.accounts&#10;PK: account_id&#10;WAL: logical / pgoutput" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#e8f2ff;strokeColor=#356ca5;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="210" width="280" height="150" />
+        </mxCell>
+        <mxCell id="dbz" value="2  Debezium&#10;&#10;initial snapshot → CDC&#10;r / c / u / d + LSN&#10;Kafka Connect: connect" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#fff1d8;strokeColor=#b77a18;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="450" y="210" width="280" height="150" />
+        </mxCell>
+        <mxCell id="kafka" value="3  Kafka&#10;&#10;bank.public.accounts&#10;1 partition · key: account_id&#10;retention: 7 дней" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#fff1d8;strokeColor=#b77a18;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="850" y="210" width="280" height="150" />
+        </mxCell>
+        <mxCell id="worker" value="4  Микробатч / Python&#10;&#10;до 500 событий / ~2 с&#10;дедупликация → SCD Type 2&#10;один writer: worker" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#eee8fb;strokeColor=#7754aa;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1250" y="210" width="340" height="150" />
+        </mxCell>
+        <mxCell id="wal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.5;" edge="1" parent="1" source="source" target="dbz">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="wal-label" value="WAL / slot&#10;+ снимок" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="wal">
+          <mxGeometry as="geometry" x="-1" y="0" width="100" height="52" relative="1">
+            <mxPoint as="offset" x="15" y="-50" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.5;" edge="1" parent="1" source="dbz" target="kafka">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="events-label" value="CDC JSON&#10;key / value" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="events">
+          <mxGeometry as="geometry" x="-1" y="0" width="100" height="52" relative="1">
+            <mxPoint as="offset" x="15" y="-50" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="poll" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.5;" edge="1" parent="1" source="kafka" target="worker">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="poll-label" value="poll()&#10;offsets" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="poll">
+          <mxGeometry as="geometry" x="-1" y="0" width="90" height="52" relative="1">
+            <mxPoint as="offset" x="20" y="-50" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="query" value="7  Запрос на дату&#10;&#10;CLI: main.py show --at ...&#10;PyIceberg → Arrow&#10;valid_from ≤ t &lt; valid_to&#10;исключить is_deleted" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#edf0f5;strokeColor=#697b92;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="560" width="380" height="200" />
+        </mxCell>
+        <mxCell id="catalog" value="5  Каталог Iceberg&#10;&#10;PyIceberg SQL catalog&#10;отдельный PostgreSQL: catalog&#10;таблицы → metadata_location&#10;сами строки здесь не хранятся" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#e4f3ed;strokeColor=#2e8165;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="560" y="560" width="380" height="200" />
+        </mxCell>
+        <mxCell id="lakehouse" value="6  MinIO + Apache Iceberg&#10;&#10;s3://warehouse/ · Parquet + metadata&#10;Bronze: bank.cdc_events — append&#10;Silver: bank.accounts_scd2 — overwrite&#10;valid_from_ms / valid_to_ms&#10;is_current / is_deleted / version_id" style="rounded=1;whiteSpace=wrap;html=0;align=left;verticalAlign=top;spacing=20;fontFamily=Arial;fontSize=18;fillColor=#e4f3ed;strokeColor=#2e8165;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1080" y="560" width="510" height="240" />
+        </mxCell>
+        <mxCell id="commit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=0.3235294117647059;exitY=1.0;entryX=0.5;entryY=0.0;" edge="1" parent="1" source="worker" target="catalog">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1360" y="440" />
+              <mxPoint x="750" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="commit-label" value="load / commit указателя метаданных" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="commit">
+          <mxGeometry as="geometry" x="-1" y="0" width="440" height="52" relative="1">
+            <mxPoint as="offset" x="-550" y="50" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="write" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=0.7058823529411765;exitY=1.0;entryX=0.803921568627451;entryY=0.0;" edge="1" parent="1" source="worker" target="lakehouse">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="write-label" value="append Bronze&#10;→ overwrite Silver" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="write">
+          <mxGeometry as="geometry" x="-1" y="0" width="130" height="52" relative="1">
+            <mxPoint as="offset" x="10" y="85" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=0.0;exitY=0.3;entryX=1.0;entryY=0.3;" edge="1" parent="1" source="catalog" target="query">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="lookup-label" value="metadata&#10;location" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="lookup">
+          <mxGeometry as="geometry" x="-1" y="0" width="105" height="52" relative="1">
+            <mxPoint as="offset" x="-115" y="-52" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pointer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=1.0;exitY=0.675;entryX=0.0;entryY=0.5625;dashed=1;" edge="1" parent="1" source="catalog" target="lakehouse">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="pointer-label" value="ссылка на&#10;metadata.json" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="pointer">
+          <mxGeometry as="geometry" x="-1" y="0" width="120" height="52" relative="1">
+            <mxPoint as="offset" x="10" y="-55" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="read" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#48617c;strokeWidth=2;exitX=0.5;exitY=1.0;entryX=0.5;entryY=1.0;" edge="1" parent="1" source="lakehouse" target="query">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1335" y="855" />
+              <mxPoint x="240" y="855" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="read-label" value="чтение Parquet из MinIO — без запросов к операционной БД" style="edgeLabel;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#48617c;" vertex="1" connectable="0" parent="read">
+          <mxGeometry as="geometry" x="-1" y="0" width="650" height="52" relative="1">
+            <mxPoint as="offset" x="-765" y="23" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="semantics" value="Надёжность: Bronze commit → Silver commit → Kafka commit. После сбоя Silver восстанавливается из Bronze.&#10;История начинается со снимка; время — время изменения в источнике, не бизнес-дата задним числом." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="910" width="1520" height="64" />
+        </mxCell>
+        <mxCell id="legend-source" value="Источник" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="86" y="1021" width="220" height="30" />
+        </mxCell>
+        <mxCell id="swatch-source" style="rounded=1;fillColor=#e8f2ff;strokeColor=#356ca5;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="1020" width="24" height="24" />
+        </mxCell>
+        <mxCell id="legend-stream" value="CDC / поток" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="361" y="1021" width="220" height="30" />
+        </mxCell>
+        <mxCell id="swatch-stream" style="rounded=1;fillColor=#fff1d8;strokeColor=#b77a18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="325" y="1020" width="24" height="24" />
+        </mxCell>
+        <mxCell id="legend-compute" value="Обработка" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="636" y="1021" width="220" height="30" />
+        </mxCell>
+        <mxCell id="swatch-compute" style="rounded=1;fillColor=#eee8fb;strokeColor=#7754aa;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="1020" width="24" height="24" />
+        </mxCell>
+        <mxCell id="legend-lake" value="Lakehouse" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="911" y="1021" width="220" height="30" />
+        </mxCell>
+        <mxCell id="swatch-lake" style="rounded=1;fillColor=#e4f3ed;strokeColor=#2e8165;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="875" y="1020" width="24" height="24" />
+        </mxCell>
+        <mxCell id="legend-query" value="Аналитика" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1186" y="1021" width="220" height="30" />
+        </mxCell>
+        <mxCell id="swatch-query" style="rounded=1;fillColor=#edf0f5;strokeColor=#697b92;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1150" y="1020" width="24" height="24" />
+        </mxCell>
+        <mxCell id="status" value="Docker: 6 основных контейнеров работают; 2 init завершены (0). Реальный CDC → 7 SCD-версий проверен." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=16;fontColor=#182a43;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="50" y="1070" width="1520" height="30" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

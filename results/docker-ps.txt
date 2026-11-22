@@ -1,0 +1,7 @@
+CONTAINER ID   IMAGE                                      COMMAND                  CREATED              STATUS                        PORTS                                NAMES
+8b8584dfea34   quay.io/debezium/connect:3.3               "/docker-entrypoint.…"   About a minute ago   Up 55 seconds (healthy)       127.0.0.1:8083->8083/tcp             marina-scd2-lab-connect-1
+f008ea31caa6   marina-scd2-lab-worker                     "python main.py run"     About a minute ago   Up 55 seconds                                                      marina-scd2-lab-worker-1
+1e5debd80512   apache/kafka:3.9.1                         "/__cacert_entrypoin…"   About a minute ago   Up About a minute (healthy)   9092/tcp                             marina-scd2-lab-kafka-1
+cdc792f26507   pgsty/minio:RELEASE.2026-08-04T00-00-00Z   "/usr/bin/docker-ent…"   8 minutes ago        Up 2 minutes                  127.0.0.1:9000-9001->9000-9001/tcp   marina-scd2-lab-minio-1
+962bf6b1941b   postgres:16.6                              "docker-entrypoint.s…"   8 minutes ago        Up 2 minutes (healthy)        5432/tcp                             marina-scd2-lab-source-1
+91ae58d09a13   postgres:16.6                              "docker-entrypoint.s…"   8 minutes ago        Up 2 minutes (healthy)        5432/tcp                             marina-scd2-lab-catalog-1
